@@ -142,7 +142,7 @@ void loop()
   read_data_wire(T_out,2);
   float temperature = linear_data_format(EEPROM.read(4),EEPROM.read(5));
   Serial.print("Current: ");
-  Serial.print(tempreture);
+  Serial.print(current);
   Serial.print(" Voltage: ");
   Serial.print(voltage);
   Serial.print(" Power: ");
