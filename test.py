@@ -4,7 +4,7 @@ import os
 
 
 def main():
-    ser = serial.Serial("Com9",9600)
+    ser = serial.Serial("Com9",9600)  #Replace with the number of Com port connected to the chip 
     message = ser.readline()
     while True:
         option = raw_input("Enter 1 to get Current, Enter 2 to get Voltage, Enter 3 to get Power, Enter 4 to get temperature, Enter 5 to quit\n")
