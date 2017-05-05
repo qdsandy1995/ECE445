@@ -1,6 +1,5 @@
 #include <EEPROM.h>
 
-#include <i2cmaster.h>
 #include <Wire.h>
 #include <Arduino.h>  // <-- Must add to *.INO sketch.
 
