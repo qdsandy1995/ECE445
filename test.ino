@@ -31,6 +31,7 @@ void setup()
   Serial.begin(9600);
 }
 
+// Transform LID to Direct Format
 float linear_data_format(int datalow, int datahigh)
 {
   int y = ((datahigh & 7) << 8) + datalow;
@@ -44,6 +45,8 @@ float linear_data_format(int datalow, int datahigh)
   
   return y*pow(2,n); 
 }
+
+//Read data from PMbus using wire library
 void read_data_wire(int command, int byte_num)
 {
   int addr;
@@ -68,32 +71,9 @@ void read_data_wire(int command, int byte_num)
   while(Wire.available()) // loop all bytes if any are available
 {
   int a = Wire.read();
-  //Serial.print(a, HEX); // print em out
   EEPROM.write(addr,a);
   addr++;
-  //Serial.print(" ");
 }
-  //Serial.println(" ");
-}
-
-void read_data_i2c(int command, int byte_num)
-{
-  int dev_addr = 0x5B<<1;
-  int datalow = 0;
-  int datahigh = 0;
-  int pec = 0;
-  i2c_start_wait(dev_addr+I2C_WRITE);
-  i2c_write(command);
-  //i2c_write(16);
-  i2c_rep_start(dev_addr+I2C_READ);
-  datalow = i2c_readAck();
-  datahigh = i2c_readAck();
-  pec = i2c_readNak();
-  i2c_stop();
-  Serial.print(datalow, HEX);
-  Serial.print(" ");
-  Serial.print(datahigh, HEX);
-  Serial.println(" ");
 }
 
 void test_signals()
@@ -106,7 +86,6 @@ void test_signals()
   {
     Serial.print("PSU is OK\n");
   }
-/*
   if(digitalRead(SMB_Alert) == HIGH)
   {
     Serial.print("OK\n");
@@ -115,8 +94,8 @@ void test_signals()
   {
     Serial.print("Alert!\n");
   }
-  */
 }
+
 // the loop routine runs over and over again forever:
 void loop()
 {
@@ -130,10 +109,7 @@ void loop()
   delay(100);
   digitalWrite(SMART_ON, LOW);
   
-  //read_data_wire(0x19,1);
-  //Serial.println(EEPROM.read(0),HEX);
-  //
-  //test_signals(); 
+  // Read datas from EEPROM
   read_data_wire(P_out,2);
   float power = linear_data_format(EEPROM.read(0),EEPROM.read(1));
   read_data_wire(I_out, 2);
